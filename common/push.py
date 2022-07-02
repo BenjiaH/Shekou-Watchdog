@@ -205,24 +205,16 @@ class Push:
 
     @logger.catch
     def push(self, result, uid, user_wechat_push, user_email_push, sendkey="", userid="", email_rxer=""):
-        status = result[0]
-        # errno = result[1]
-        if status == 0:
-            title = self._push_content_existed["title"]
-            message = self._push_content_existed["message"]
-        elif status == 1:
+        errno = result[0]
+        msg = result[1]
+        if errno == 0:
             title = self._push_content_success["title"]
-            message = self._push_content_success["message"] + str(result[1])
-        elif status == 2:
-            title = self._push_content_failed["title"]
-            message = self._push_content_failed["message"]
+            message = self._push_content_success["message"] + msg
         else:
             title = self._push_content_error["title"]
-            message = self._push_content_error["message"]
-        # if errno != 0:
-        #     errmsg = [i["msg"] for i in self._errno_msg if errno == i["errno"]][0]
-        #     message = f'{message}[错误信息:"{errmsg}"]'
-        # logger.debug(f"Title:{title}#Message:{message}#Error code:{errno}")
+            errmsg = [i["msg"] for i in self._errno_msg if errno == i["errno"]][0]
+            message = f'{self._push_content_error["message"]}[错误信息:"{errmsg}"]'
+        logger.debug(f"Title:{title}#Message:{message}#Error code:{errno}")
         if self._wechat_switch == "on":
             if user_wechat_push == "1":
                 try:
