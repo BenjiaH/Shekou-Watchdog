@@ -12,14 +12,16 @@ class Report:
         self._errno = 0
         self._session = 0
         self._headers = 0
-        self._url = None
+        self._sail_query_url = None
+        self._purchase_url = None
         self._payload = None
         self._msg_footer = None
         self.fetch_param()
 
     @logger.catch
     def fetch_param(self):
-        self._url = config.config('/config/url', utils.get_call_loc())
+        self._sail_query_url = config.config('/config/url/sail_query_url', utils.get_call_loc())
+        self._purchase_url = config.config('/config/url/purchase_url', utils.get_call_loc())
         self._payload = config.config('/config/payload', utils.get_call_loc())
         self._msg_footer = config.config('/config/copyright', utils.get_call_loc())
         logger.debug("Fetched [Report] params.")
@@ -39,10 +41,10 @@ class Report:
         payload = self._payload
         payload["toDate"] = date
         payload = f"siteResJson={json.dumps(payload)}"
-        res = self._session.post(url=self._url, headers=self._headers, data=payload)
-        logger.debug(f"URL:{self._url}. Payload:{payload}. Status code:{res.status_code}")
+        res = self._session.post(url=self._sail_query_url, headers=self._headers, data=payload)
+        logger.debug(f"URL:{self._sail_query_url}. Payload:{payload}. Status code:{res.status_code}")
         if res.status_code != 200:
-            logger.error(f"Failed:POST request. URL:{self._url}. Status code:{res.status_code}")
+            logger.error(f"Failed:POST request. URL:{self._sail_query_url}. Status code:{res.status_code}")
             self._set_error(1, 1, utils.get_call_loc(True))
             return []
         else:
@@ -67,6 +69,7 @@ class Report:
             logger.debug(f"The error flag: {self._error}. Exit the function.")
             return
         ticket_info = ""
+        quick_purchase = ""
         if not msg:
             header = f"出发日期: {date}\n"
             ticket_info = "\n当前无票\n"
@@ -75,7 +78,8 @@ class Report:
             for i in msg:
                 seat_detail = [{seatType['seatTypeName']: seatType['num']} for seatType in i['seatList']]
                 ticket_info += f"\n出发时间: {i['goTime']}\n剩余船票数量: {i['totalRemainVolume']}\n详情: {seat_detail}\n"
-        formatted_msg = header + ticket_info + self._msg_footer
+            quick_purchase = f"\n快速购票链接：{self._purchase_url}\n"
+        formatted_msg = header + ticket_info + quick_purchase + self._msg_footer
         return formatted_msg
 
     @logger.catch
