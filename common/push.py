@@ -183,9 +183,11 @@ class Push:
     @staticmethod
     @retry(stop_max_attempt_number=3, wait_fixed=500)
     def _wechat_v3(url, payload):
-        # go_scf V2.0 请求必须为post，且body必须为json
-        # 详见文档:https://github.com/riba2534/wecomchan/tree/main/go-scf#%E4%BD%BF%E7%94%A8-post-%E8%BF%9B%E8%A1%8C%E8%AF%B7%E6%B1%82
         log_payload = deepcopy(payload)
+        # 大部分情况下，GET 请求已经可以很好的满足发送一些短消息的需求，但是当消息体过长时，需使用 POST 请求。
+        # 与 GET 请求不同的是，POST 请求不从 Query string 获取参数，所有参数改为从 HTTP message body 中获取，这里要求 Body 中必须是 JSON 格式，
+        # 参数字段名称仍与 GET 请求的名称保持一致，且 json 的 key 和 value 必须是 string 类型
+        # 详见文档:https://github.com/riba2534/wecomchan/tree/main/go-scf#%E4%BD%BF%E7%94%A8-post-%E8%BF%9B%E8%A1%8C%E8%AF%B7%E6%B1%82
         res = requests.post(url=url, data=json.dumps(payload))
         log_payload["sendkey"] = "*******"
         logger.debug(f"URL:{url}. Payload:{log_payload}. Status code:{res.status_code}")
