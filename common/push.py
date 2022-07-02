@@ -86,9 +86,7 @@ class Push:
         self._wechat_v1_url = None
         self._wechat_v2_url = None
         self._wechat_v3_url = None
-        self._push_content_existed = None
         self._push_content_success = None
-        self._push_content_failed = None
         self._push_content_error = None
         self._wechat_v = None
         self.fetch_param()
@@ -109,9 +107,7 @@ class Push:
         self._wechat_v1_url = config.config('/config/push_url/wechat_v1', utils.get_call_loc())
         self._wechat_v2_url = config.config('/config/push_url/wechat_v2', utils.get_call_loc())
         self._wechat_v3_url = config.config('/setting/push/wechat/api', utils.get_call_loc())
-        self._push_content_existed = config.config('/config/push_content/existed', utils.get_call_loc())
         self._push_content_success = config.config('/config/push_content/success', utils.get_call_loc())
-        self._push_content_failed = config.config('/config/push_content/failed', utils.get_call_loc())
         self._push_content_error = config.config('/config/push_content/error', utils.get_call_loc())
         self._wechat_v = config.config('/setting/push/wechat/version', utils.get_call_loc())
         logger.debug("Fetched [Push] params.")
