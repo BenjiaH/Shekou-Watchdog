@@ -12,12 +12,7 @@ from datetime import datetime
 class Utils:
     @logger.catch
     def __init__(self):
-        self.fetch_param()
         self._ua = UserAgent(verify_ssl=False)
-
-    @logger.catch
-    def fetch_param(self):
-        logger.debug("Fetched [Utils] params.")
 
     @logger.catch
     def get_random_useragent(self):
@@ -52,14 +47,13 @@ class Utils:
 
     @logger.catch
     def refresh_param(self):
-        from common.service import report_service
-        report_service.fetch_param()
+        from common.service import service
+        service.fetch_param()
         from common.report import report
         report.fetch_param()
         from common.push import push
         push.fetch_param()
         push.bot_email.fetch_param()
-        self.fetch_param()
 
 
 utils = Utils()
