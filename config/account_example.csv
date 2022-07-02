@@ -1,0 +1,5 @@
+﻿ID,date,wechat_push,email_push,sendkey,userid,email
+# 可再每行最前添加“#”，以注释此行。
+小明,2022-09-11,1,1,XXXXXXXXXXXXX,XXXXX,XXXX@XX.com
+🍭,2022-09-12,1,0,XXXUXXXXXXXXX,XXXX,
+Tony,2022-09-13,0,1,,,XXXX@XX.com

@@ -1,0 +1,8 @@
+test/
+__pycache__/
+data/
+.idea/
+log/
+tools/
+config.json
+account.csv

@@ -1,0 +1,6 @@
+fake_useragent
+lxml
+requests
+beautifulsoup4
+loguru
+retrying

@@ -1,0 +1,101 @@
+{
+    "//setting": "用户设置",
+    "setting": {
+        "timer": {
+            "//switch": "[必填]如果想开启定时打卡,则将 switch 设置为 on,默认为 off 不开启",
+            "switch": "off",
+            "//set_time": "[选填]开启定时打卡后必须设定打卡时间,如6点5分则输入06.05(用双引号包裹)",
+            "set_time": "06.05"
+        },
+        "push": {
+            "//email": "邮件推送配置",
+            "email": {
+                "//switch": "[必填]如果需要邮件推送打卡结果,则将 switch 设置为 on,默认为 off 不开启",
+                "switch": "off",
+                "//bot_email": "[选填]负责推送服务的邮箱",
+                "bot_email": {
+                    "//email_user": "邮箱地址 xxxxxxxx@xx.com",
+                    "email_user": "",
+                    "//email_host": "邮箱域名 smtp.xx.com",
+                    "email_host": "",
+                    "//email_pwd": "邮箱授权码（并不一定是邮箱密码）",
+                    "email_pwd": ""
+                }
+            },
+            "//wechat": "微信推送配置,使用了Server酱的推送服务",
+            "wechat": {
+                "//switch": "[必填]微信推送全局开关。如果需要微信推送打卡结果,则将 switch 设置为 on,默认为 off 不开启",
+                "switch": "off",
+                "//version": "[选填]提供多种推送通道，请确保选择正确。version为[1]表示sc版Server酱，[2]表示sct版Server酱，[3]表示腾讯云自建企业微信(go-scf)。默认为[2] sct版Server酱",
+                "version": 2,
+                "//api": "[选填]如果version为[3],必须填入 api (请求路径:https://xxxxxxxxxx)",
+                "api": "https://xxxxxxxxxx"
+            }
+        }
+    },
+    "//config": "！！程序配置,请勿修改！！",
+    "config": {
+        "url": "https://www.cmskchp.com/sailingsJson",
+        "payload": {
+            "startSite": "SK",
+            "endSite": "HKA",
+            "toDate": "NEED_UPDATE"
+        },
+        "push_url": {
+            "wechat_v1": "http://sc.ftqq.com",
+            "wechat_v2": "https://sctapi.ftqq.com"
+        },
+        "path": {
+            "account_file": "../config/account.csv",
+            "email_tmpl": "../config/email_tmpl.html"
+        },
+        "push_content": {
+            "existed": {
+                "title": "[查询失败]",
+                "message": ""
+            },
+            "success": {
+                "title": "[查询成功]",
+                "message": ""
+            },
+            "failed": {
+                "title": "[缺省]",
+                "message": ""
+            },
+            "error": {
+                "title": "[ERROR]",
+                "message": "ERROR!"
+            }
+        },
+        "errmsg": [
+            {
+                "errno": 0,
+                "msg": "OK"
+            },
+            {
+                "errno": -1,
+                "msg": "未知错误"
+            },
+            {
+                "errno": 1,
+                "msg": "缺省"
+            },
+            {
+                "errno": 2,
+                "msg": "缺省"
+            },
+            {
+                "errno": 3,
+                "msg": "缺省"
+            },
+            {
+                "errno": 4,
+                "msg": "缺省"
+            },
+            {
+                "errno": 5,
+                "msg": "缺省"
+            }
+        ]
+    }
+}
