@@ -51,7 +51,7 @@
 - [X] 多账户
 - [X] 实时刷新配置文件
 - [X] 高安全性：随机`User-Agent`、HTTPS加密、SSL加密
-- [X] 购票直达链接
+- [X] 购票直达链接（不完美）
 - [ ] 后期计划运行两个服务，分别用来查票和通知，以更高频率查票并缓存结果，需要推送时直接取出对应缓存
 - [ ] **急需能共同完成以上TODO的小伙伴，请联系 [benjia.h@qq.com](mailto:benjia.h@qq.com)**
 
@@ -77,7 +77,7 @@ pip install -r requirements.txt
 
 - 重命名`account_example.csv`文件为`account.csv`。
 - 仿照示例填写内容。
-- 可录入多行信息，即可为多账户打卡。
+- 可录入多行信息，即可为多账户使用。
 - `wechat_push`值为`1`则代表当前账户选择微信推送，`email_push`同理。
 
 ### 4.4.运行脚本
