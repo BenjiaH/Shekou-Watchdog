@@ -1,12 +1,8 @@
 import os
-import random
-import requests
 import sys
 
 from common.logger import logger
-from common.config import config
 from fake_useragent import UserAgent
-from datetime import datetime
 
 
 class Utils:
