@@ -37,6 +37,7 @@ class Service:
         for i in range(self._account_cnt):
             self._all_departure_date.append(account.sail_date(i))
         self._all_departure_date = list(set(self._all_departure_date))
+        logger.debug(f"All departure date:{self._all_departure_date}")
 
     @logger.catch
     def _task1(self):
@@ -53,6 +54,7 @@ class Service:
             self._all_date_ticket_info[self._all_departure_date[i]] = ret
             sleep(1)
         logger.info("Tickets info for all dates are checked.")
+        logger.debug(f"All date ticket info:{self._all_date_ticket_info}")
 
     @logger.catch
     def _task2(self):
@@ -64,6 +66,7 @@ class Service:
             all_date_userid[i] = ""
         for i in range(self._account_cnt):
             all_date_userid[account.sail_date(i)] += f"|{account.userid(i)}"
+        logger.debug(f"All date userid:{all_date_userid}")
         for i in range(len(self._all_departure_date)):
             log_info = f"[{i + 1}/{len(self._all_departure_date)}] Date:{self._all_departure_date[i]}".center(46, '-')
             logger.info(log_info)
