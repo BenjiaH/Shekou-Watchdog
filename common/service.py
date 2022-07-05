@@ -31,6 +31,7 @@ class Service:
         self._str_now_time = now.strftime("%H.%M")
         return self._str_now_time
 
+    @logger.catch
     def _sort_departure_date(self):
         self._all_departure_date = []
         for i in range(self._account_cnt):
@@ -39,6 +40,9 @@ class Service:
 
     @logger.catch
     def _task1(self):
+        """
+        出发日期分类，并按分类日期查询
+        """
         self._sort_departure_date()
         self._all_date_ticket_info = {}
         dates_num = len(self._all_departure_date)
@@ -52,6 +56,9 @@ class Service:
 
     @logger.catch
     def _task2(self):
+        """
+        分类日期群发通知
+        """
         all_date_userid = {}
         for i in self._all_departure_date:
             all_date_userid[i] = ""
@@ -113,4 +120,3 @@ class Service:
 
 
 service = Service()
-# service.sort_departure_date()
