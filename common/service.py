@@ -15,6 +15,8 @@ class Service:
         self._account_cnt = account.row
         self._email_switch = None
         self._timer_switch = None
+        self._all_departure_date = None
+        self._all_date_ticket_info = None
         self.fetch_param()
 
     @logger.catch
@@ -29,16 +31,42 @@ class Service:
         self._str_now_time = now.strftime("%H.%M")
         return self._str_now_time
 
-    @logger.catch
-    def _task(self):
-        # ret = report.main()
+    def _sort_departure_date(self):
+        self._all_departure_date = []
         for i in range(self._account_cnt):
-            log_info = f"[{i + 1}/{self._account_cnt}] Report ID:{account.ID(i)}".center(46, '-')
+            self._all_departure_date.append(account.sail_date(i))
+        self._all_departure_date = list(set(self._all_departure_date))
+        print(self._all_departure_date)
+
+    @logger.catch
+    def _task1(self):
+        self._sort_departure_date()
+        self._all_date_ticket_info = {}
+        dates_num = len(self._all_departure_date)
+        for i in range(dates_num):
+            log_info = f"[{i + 1}/{dates_num}] Checking date:{self._all_departure_date[i]}".center(46, '-')
             logger.info(log_info)
-            ret = report.main(account.sail_date(i))
-            push.push(ret, account.ID(i), account.wechat_push(i), account.email_push(i), account.sendkey(i),
-                      account.userid(i), account.email(i))
+            ret = report.main(self._all_departure_date[i])
+            self._all_date_ticket_info[self._all_departure_date[i]] = ret
+            print(ret)
             sleep(1)
+        logger.info("Tickets info for all dates are checked.")
+
+    @logger.catch
+    def _task2(self):
+        all_date_userid = {}
+        for i in self._all_departure_date:
+            all_date_userid[i] = ""
+        for i in range(self._account_cnt):
+            all_date_userid[account.sail_date(i)] += f"|{account.userid(i)}"
+        for i in range(len(self._all_departure_date)):
+            log_info = f"[{i + 1}/{len(self._all_departure_date)}] Date:{self._all_departure_date[i]}".center(46, '-')
+            logger.info(log_info)
+            all_date_userid[self._all_departure_date[i]] = all_date_userid[self._all_departure_date[i]][1:]
+            push.push(self._all_date_ticket_info[self._all_departure_date[i]], "Hi", account.wechat_push(i),
+                      account.email_push(i), account.sendkey(i),
+                      all_date_userid[self._all_departure_date[i]], account.email(i))
+            sleep(0.5)
 
     @logger.catch
     def _gen(self):
@@ -48,7 +76,8 @@ class Service:
         else:
             if self._email_switch == "on":
                 push.bot_email.login()
-            self._task()
+            self._task1()
+            self._task2()
         end_time = time()
         cost = f"{(end_time - start_time):.2f}"
         logger.info(f"Reports are completed. Cost time:{cost}(s)".center(50, '-'))
@@ -86,3 +115,4 @@ class Service:
 
 
 service = Service()
+# service.sort_departure_date()

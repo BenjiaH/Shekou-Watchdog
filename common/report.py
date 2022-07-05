@@ -16,6 +16,7 @@ class Report:
         self._purchase_url = None
         self._payload = None
         self._msg_footer = None
+        self._is_available = None
         self.fetch_param()
 
     @logger.catch
@@ -71,9 +72,11 @@ class Report:
         ticket_info = ""
         quick_purchase = ""
         if not msg:
+            self._is_available = False
             header = f"出发日期: {date}\n"
             ticket_info = "\n当前无票\n"
         else:
+            self._is_available = True
             header = f"出发日期: {msg[0]['startDate']}\n轮船型号: {msg[0]['shipName']}\n"
             for i in msg:
                 seat_detail = [{seatType['seatTypeName']: seatType['num']} for seatType in i['seatList']]
@@ -86,6 +89,7 @@ class Report:
     def main(self, departure_date):
         self._error = 0
         self._errno = 0
+        self._is_available = False
         self._session = requests.Session()
         self._headers = {
             # 必须添加 Content-Type 字段:[x-www-form-urlencoded]
@@ -94,10 +98,7 @@ class Report:
         }
         msg = self._parse_data(self._fetch_data(departure_date))
         ret = self._format_msg(msg, departure_date)
-        if self._error != 1:
-            return self._errno, ret
-        else:
-            return self._errno, ret
+        return self._errno, ret
 
 
 report = Report()
