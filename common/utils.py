@@ -2,6 +2,7 @@ import os
 import sys
 
 from common.logger import logger
+from common.config import config
 from fake_useragent import UserAgent
 
 
@@ -49,7 +50,8 @@ class Utils:
         report.fetch_param()
         from common.push import push
         push.fetch_param()
-        push.bot_email.fetch_param()
+        if config.config('/setting/push/email/switch', self.get_call_loc()) == "on":
+            push.bot_email.fetch_param()
 
 
 utils = Utils()

@@ -12,6 +12,7 @@ class Service:
     @logger.catch
     def __init__(self):
         self._str_now_time = "0.1"
+        self._time_interval = ""
         self._account_cnt = account.row
         self._email_switch = None
         self._timer_switch = None
@@ -23,6 +24,7 @@ class Service:
     def fetch_param(self):
         self._email_switch = config.config('/setting/push/email/switch', utils.get_call_loc())
         self._timer_switch = config.config('/setting/timer/switch', utils.get_call_loc())
+        self._time_interval = config.config('/setting/timer/time_interval', utils.get_call_loc())
         logger.debug("Fetched [ReportService] params.")
 
     @logger.catch
@@ -52,8 +54,8 @@ class Service:
         logger.debug(f"All date userid:{self._all_date_userid}")
         dates_cnt = len(self._all_departure_date)
         for i in self._all_departure_date:
-            index = self._all_departure_date.index(i) + 1
-            log_info = f"[{index}/{dates_cnt}] Checking and pushing date:{i}".center(46, '-')
+            index = self._all_departure_date.index(i)
+            log_info = f"[{index + 1}/{dates_cnt}] Checking and pushing date:{i}".center(46, '-')
             logger.info(log_info)
             ret = report.main(i)
             push.push(ret, "Hi", account.wechat_push(index), account.email_push(index), account.sendkey(index),
@@ -77,28 +79,16 @@ class Service:
     def start(self):
         if self._timer_switch == "on":
             logger.info("Timer is enabled.")
+            logger.info(f"Time interval:{self._time_interval}min(s).")
             while True:
+                logger.info("Time arrived. Start to report.")
                 config.refresh()
-                str_set_time = str(config.config('/setting/timer/set_time', utils.get_call_loc()))
-                str_now_time = self._get_now_time()
-                logger.info(f"Now time:{str_now_time}. Set time:{str_set_time}.")
-                while True:
-                    config.refresh()
-                    if str_set_time != str(config.config('/setting/timer/set_time', utils.get_call_loc())):
-                        str_set_time = str(config.config('/setting/timer/set_time', utils.get_call_loc()))
-                        logger.info(f"New set time:{str_set_time}.")
-                    str_now_time = self._get_now_time()
-                    if str_now_time != str_set_time:
-                        sleep(1)
-                    else:
-                        logger.info("Time arrived. Start to report.")
-                        account.refresh()
-                        utils.refresh_param()
-                        self._gen()
-                        # avoid running twice in 1 minute
-                        logger.info("Cleaning... Estimated:1 min")
-                        sleep(60)
-                        break
+                account.refresh()
+                utils.refresh_param()
+                self._gen()
+                logger.info(f"{self._time_interval} min(s) to wait for the next run.")
+                sleep(int(self._time_interval) * 60)
+
         else:
             logger.info("Timer is disabled.")
             logger.info("Start to report.")
