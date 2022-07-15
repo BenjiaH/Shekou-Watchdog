@@ -78,7 +78,7 @@ class Report:
             for i in msg:
                 seat_detail = [{seatType['seatTypeName']: seatType['num']} for seatType in i['seatList']]
                 ticket_info += f"\n出发时间: {i['goTime']}\n剩余船票数量: {i['totalRemainVolume']}\n详情: {seat_detail}\n"
-            quick_purchase = f"\n快速购票链接：{self._purchase_url}\n"
+            quick_purchase = f'快速购票链接：<a href=\"{self._purchase_url}\">>>>点我</a>'
         formatted_msg = header + ticket_info + quick_purchase + self._msg_footer
         return formatted_msg
 
