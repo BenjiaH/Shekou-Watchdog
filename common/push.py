@@ -212,7 +212,7 @@ class Push:
             title = self._push_content_error["title"]
             errmsg = [i["msg"] for i in self._errno_msg if errno == i["errno"]][0]
             message = f'{self._push_content_error["message"]}[错误信息:"{errmsg}"]'
-        logger.debug(f"Title:{title}#Message:{message}#Error code:{errno}")
+        # logger.debug(f"Title:{title}#Message:\n{message}\n#Error code:{errno}")
         if self._wechat_switch == "on":
             if user_wechat_push == "1":
                 try:
